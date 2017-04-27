@@ -21,8 +21,31 @@ namespace Empiria.DevOps.WebApi {
 
     #region Public APIs
 
+    /// <summary>Creates a serial number for a specific physical server.</summary>
+    /// <param name="hardwareCode">The code assigned to the physical hardware.</param>
+    /// <remarks>An Empiria-DevOps-DeploymentID request header must be supplied.</remarks>
+    [HttpPost, AllowAnonymous]
+    [Route("v1/general/serial-number")]
+    public SingleObjectModel CreateSerialNumber([FromBody] string hardwareCode) {
+      try {
+        base.RequireBody(hardwareCode);
+
+        Deployment deployment = GetDeployment(this.Request);
+
+        var cryptographer = new DevOpsCryptographer(deployment);
+
+        string serialNumber = cryptographer.CreateSerialNumber(hardwareCode);
+
+        return new SingleObjectModel(this.Request, serialNumber);
+
+      } catch (Exception e) {
+        throw base.CreateHttpException(e);
+      }
+    }
+
+
     /// <summary>Gets a protected string encrypted according to the caller rules.</summary>
-    /// <param name="value">The string to be encrypted.</param>
+    /// <param name="plainText">The string to be encrypted.</param>
     /// <remarks>An Empiria-DevOps-DeploymentID request header must be supplied.</remarks>
     [HttpPost, AllowAnonymous]
     [Route("v1/general/protect-string")]

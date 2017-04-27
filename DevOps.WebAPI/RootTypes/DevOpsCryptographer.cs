@@ -35,6 +35,18 @@ namespace Empiria.DevOps {
 
     #region Public methods
 
+    internal string CreateSerialNumber(string hardwareCode) {
+      string serialNumber = String.Empty;
+
+      string[] licArray = _deployment.License.LicenseNumber.Split('-');
+      for (int i = 0; i < licArray.Length; i++) {
+        string part = hardwareCode.Substring(i * 11, 11) + licArray[i];
+        serialNumber += this.GenerateSerialNumberPart(this.GetLicenseHashCode(part), hardwareCode) + "-";
+      }
+      return serialNumber.TrimEnd('-');
+    }
+
+
     /// <summary>Takes a plaintext string and encrypts it with the giving public key.</summary>
     /// <param name="plaintext">Text string to be encrypted.</param>
     public string Encrypt(string plainText) {
@@ -70,6 +82,7 @@ namespace Empiria.DevOps {
       return result;
     }
 
+
     private byte[] ConstructKey(string publicKey) {
       byte[] result = new byte[32];
       byte[] key = _deployment.License.Key;
@@ -91,6 +104,7 @@ namespace Empiria.DevOps {
       return result;
     }
 
+
     private string EncryptString(string plainText, string publicKey) {
       var textConverter = new UTF8Encoding();
       var rijndael = new RijndaelManaged() {
@@ -108,6 +122,51 @@ namespace Empiria.DevOps {
 
       return Convert.ToBase64String(memoryStream.ToArray());
     }
+
+
+    private string GenerateSerialNumberPart(string hashCode, string hardwareCode) {
+      SHA256Managed sha = new SHA256Managed();
+      byte[] hash = sha.ComputeHash(ASCIIEncoding.ASCII.GetBytes(hashCode + hardwareCode));
+
+      return GetLicenseHashCode(Convert.ToBase64String(hash).ToUpper());
+    }
+
+
+    private string GetLicenseHashCode(string license) {
+      char[] licenseArray = license.ToCharArray();
+      string hashCode = String.Empty;
+
+      int x = licenseArray[0] * 3;
+      for (int i = 1; i < licenseArray.Length; i++) {
+        switch (i % 3) {
+          case 0:
+            if ((x % 3) != 2) {
+              x = 65 + (x % 26);
+              hashCode += Convert.ToChar(x);
+            } else {
+              x = 49 + (x % 9);
+              hashCode += Convert.ToChar(x);
+            }
+            x += licenseArray[i] * 3;
+            break;
+          case 1:
+            x += licenseArray[i] * 5;
+            break;
+          case 2:
+            x += licenseArray[i] * 7;
+            break;
+        } // switch
+      }  // for
+      if ((x % 3) != 2) {
+        x = 65 + (x % 26);
+        hashCode += Convert.ToChar(x);
+      } else {
+        x = 48 + (x % 10);
+        hashCode += Convert.ToChar(x);
+      }
+      return hashCode;
+    }
+
 
     private byte[] GetLicenseKey() {
       byte[] result = new byte[32];
@@ -131,6 +190,7 @@ namespace Empiria.DevOps {
 
       return result;
     }
+
 
     static private byte[] ParsePublicKey(string publicKey, byte[] byteArray) {
       var result = new byte[byteArray.Length];
