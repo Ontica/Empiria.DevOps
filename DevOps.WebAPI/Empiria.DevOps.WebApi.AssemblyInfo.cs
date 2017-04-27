@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Solution : Empiria DevOps                                   System  : DevOps Web API                      *
 *  Assembly : Empiria.DevOps.WebApi.dll                        Pattern : Assembly Attributes File            *
-*  Type     : CallerConfiguration                              License : Please read LICENSE.txt file        *
+*                                                              License : Please read LICENSE.txt file        *
 *                                                                                                            *
 *  Summary  : Web Api that provides DevOps services and artifacts for Empiria-based applications.            *
 *                                                                                                            *

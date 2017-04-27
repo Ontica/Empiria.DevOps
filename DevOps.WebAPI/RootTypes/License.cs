@@ -7,7 +7,6 @@
 *  Summary  : Contains information about a customer's Empiria solution license.                              *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 using System.Data;
 
 using Empiria.Json;
@@ -85,7 +84,7 @@ namespace Empiria.DevOps {
 
     #endregion Properties
 
-    #region Methods
+    #region Private methods
 
     private void LoadSecurityValues(string jsonString) {
       var json = JsonObject.Parse(jsonString);
@@ -95,7 +94,7 @@ namespace Empiria.DevOps {
       this.LKey = json.GetList<byte>("LKey").ToArray();
     }
 
-    #endregion Methods
+    #endregion Private methods
 
   }  // class License
 
