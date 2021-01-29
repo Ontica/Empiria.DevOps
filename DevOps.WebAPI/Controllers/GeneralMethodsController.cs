@@ -12,7 +12,6 @@ using System.Net.Http;
 using System.Web.Http;
 
 using Empiria.WebApi;
-using Empiria.WebApi.Models;
 
 namespace Empiria.DevOps.WebApi {
 

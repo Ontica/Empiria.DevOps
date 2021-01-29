@@ -2,10 +2,10 @@
 
 Web API HTTP/JSON RESTful interface to access Empiria DevOps services.
 
-# License
+## License
 
 This system is distributed by the GNU AFFERO GENERAL PUBLIC LICENSE.
 
-# Copyright
+## Copyright
 
-Copyright © 2016-2018. La Vía Óntica SC, Ontica LLC and colaborators.
+Copyright © 2017-2021. La Vía Óntica SC, Ontica LLC and colaborators.

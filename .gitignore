@@ -21,6 +21,7 @@ App_Data/
 *.zip
 *.snk
 *.cd
+*.environment.vars.json
 ZZ*.*
 
 # Build results
@@ -86,6 +87,7 @@ publish
 # NuGet Packages Directory and files
 packages
 *.nupkg
+*.nugetreferenceswitcher
 
 # Windows Azure Build Output
 csx
